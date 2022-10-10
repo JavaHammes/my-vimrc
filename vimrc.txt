@@ -1,0 +1,37 @@
+" leader key
+let mapleader = " "
+
+imap jj <Esc>
+imap kk <Esc>
+
+nmap ,o o<Esc>
+nmap ,O O<Esc>
+nmap ,p :w ! python3 %  
+
+" copy and paste to/from system clipboard
+nnoremap <leader>y "*y
+nnoremap <leader>p "*p
+
+set number
+set relativenumber
+" search as characters are entered
+set incsearch
+
+autocmd Filetype python set cursorcolumn
+
+call plug#begin('~/.vim/plugged')
+
+" Plug 'kyoz/purify', { 'rtp': 'vim' }
+Plug 'flazz/vim-colorschemes'
+Plug 'scrooloose/nerdtree'
+Plug 'nvie/vim-flake8'
+Plug 'vimwiki/vimwiki'
+
+call plug#end()
+
+set nocompatible
+filetype plugin on
+syntax on
+colorscheme eva01
+
+set ts=4 sw=4
