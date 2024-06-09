@@ -57,5 +57,22 @@ nnoremap ,c "+y
 " ,y to paste from clipboard
 nnoremap ,y "+p
 
+nnoremap ,s bi`<ESC>ea`<ESC>
+
 " Enable clipboard support
 set clipboard=unnamedplus
+
+" Define the key mapping for toggling background transparency
+nnoremap ,bg :call ToggleBackgroundTransparency()<CR>
+
+" Function to toggle background transparency
+let t:is_transparent = 0
+function! ToggleBackgroundTransparency()
+	if t:is_transparent == 0
+		hi Normal guibg=#111111 ctermbg=black
+		let t:is_transparent = 1
+	else
+		hi Normal guibg=NONE ctermbg=NONE
+		let t:is_transparent = 0
+	endif
+endfunction
