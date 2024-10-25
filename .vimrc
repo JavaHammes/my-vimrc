@@ -1,78 +1,135 @@
-" Map leader to comma
-let mapleader = ","
+" map leader to space
+let mapleader = " "
 
-" Fast search
-nmap <leader>w :w!<cr>
+set cursorline
+set clipboard=unnamedplus
 
-" Show matching brackets when text indicator is over them
+" Key Mappings
+nnoremap <leader>ev :e $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>W :wq<CR>
+nnoremap <leader>Q :q!<CR>
+
+" better searching
+set incsearch
+set hlsearch
+set wrapscan
+set ignorecase
+set smartcase
 set showmatch
 
-" Search while typing
-set incsearch
+" tabwidth to four spaces
+set tabstop=4
+set shiftwidth=4
+set softtabstop=0
+set expandtab
 
-" Highlight search results
-set hlsearch
-
-" Enable syntax highlighting
 syntax enable
 
-" Set colortheme and transparent background
-colorscheme torte
-highlight Normal ctermbg=none
-highlight NonText ctermbg=none
-highlight LineNr ctermbg=none
-highlight Folded ctermbg=none
-highlight EndOfBuffer ctermbg=none
-
-" No backup because we have git
+" no swap file
 set nobackup
 set nowb
 set noswapfile
 
-" Map search to <space>
-map <space> /
+set relativenumber
+set number
 
-" Remap <ESC>
-imap jj <ESC>
-imap kk <ESC>
+" improve performance
+set lazyredraw
+set ttyfast
 
-" Toggle first letter of word behind cursor
-imap <leader>R <ESC>:normal! b~e<cr>
+" Enable mouse
+set mouse=a
 
-" Keybindings for tabs
-map <leader>tn :tabnew<cr>
-map <leader>tc :tabclose<cr>
-map <leader>t<leader> :tabnext<cr>
+" disable macros
+nnoremap q <Nop>
 
-" Pressing ,ss will toggle spell checking
-map <leader>ss :setlocal spell!<cr>
-set spelllang=en,de
+" disable wildmenu
+set nowildmenu
 
-" Make
-map <leader>m :!make &<cr>
+" easier resizing of windows
+nnoremap <C-Up>    :resize +2<CR>
+nnoremap <C-Down>  :resize -2<CR>
+nnoremap <C-Left>  :vertical resize -2<CR>
+nnoremap <C-Right> :vertical resize +2<CR>
 
-" ,c to copy to clipboard
-nnoremap ,c "+y
+" disable arrow keys
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Right> <Nop>
 
-" ,y to paste from clipboard
-nnoremap ,y "+p
+" remove trailing whitespaces automatically
+autocmd BufWritePre * %s/\s\+$//e
 
-nnoremap ,s bi`<ESC>ea`<ESC>
+" remove unnecessary UI elements
+set guioptions-=T
+set guioptions-=r
+set guioptions-=L
+set guioptions-=b
 
-" Enable clipboard support
-set clipboard=unnamedplus
+call plug#begin('~/.local/share/nvim/plugged')
 
-" Define the key mapping for toggling background transparency
-nnoremap ,bg :call ToggleBackgroundTransparency()<CR>
+Plug 'github/copilot.vim'
+Plug 'preservim/nerdtree'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+Plug 'neovim/nvim-lspconfig'
 
-" Function to toggle background transparency
-let t:is_transparent = 0
-function! ToggleBackgroundTransparency()
-	if t:is_transparent == 0
-		hi Normal guibg=#111111 ctermbg=black
-		let t:is_transparent = 1
-	else
-		hi Normal guibg=NONE ctermbg=NONE
-		let t:is_transparent = 0
-	endif
-endfunction
+call plug#end()
+
+map <C-n> :NERDTreeToggle<CR>
+
+" lightline settings
+set noshowmode
+let g:lightline = {
+      \ 'colorscheme': 'Tomorrow',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \ },
+      \ }
+
+" Enable commenting with vim-commentary
+" gcc to comment out a line
+
+" Quick surround example
+" cs"' to change surrounding quotes
+" ds" to delete surrounding quotes
+" ysiw" to surround word with quotes
+
+
+" Customize colors for vim-gitgutter
+" Add: Use green for added lines
+highlight GitGutterAdd guifg=#00ff00 guibg=NONE
+
+" Change: Use yellow for modified lines
+highlight GitGutterChange guifg=#ffff00 guibg=NONE
+
+" Delete: Use red for removed lines
+highlight GitGutterDelete guifg=#ff0000 guibg=NONE
+
+" Enable LSP for Python
+lua << EOF
+require('lspconfig').pyright.setup{}
+EOF
+
+" Enable LSP for C/C++
+lua << EOF
+require('lspconfig').clangd.setup{}
+EOF
+
+
+" :PlugClean to remove unused plugins
+" :PlugUpdate to update plugins
+" :PlugInstall to install plugins
