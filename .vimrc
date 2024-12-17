@@ -1,8 +1,33 @@
 " map leader to space
 let mapleader = " "
 
-set cursorline
 set clipboard=unnamedplus
+
+" disable table mappings
+let g:vimwiki_key_mappings = {
+            \ 'all_maps': 1,
+            \ 'global': 1,
+            \ 'headers': 1,
+            \ 'text_objs': 1,
+            \ 'table_format': 1,
+            \ 'table_mappings': 0,
+            \ 'lists': 1,
+            \ 'links': 1,
+            \ 'html': 1,
+            \ 'mouse': 0,
+            \ }
+augroup VimwikiRemaps
+    autocmd!
+    " unmap tab in insert mode
+    autocmd Filetype vimwiki silent! iunmap <buffer> <Tab>
+    " remap table tab mappings to M-n M-p
+    autocmd Filetype vimwiki inoremap <silent><expr><buffer> <M-n> vimwiki#tbl#kbd_tab()
+    autocmd Filetype vimwiki inoremap <silent><expr><buffer> <M-p> vimwiki#tbl#kbd_shift_tab()
+    " on enter if completion is open, complete first element otherwise use
+    " default vimwiki mapping
+    autocmd Filetype vimwiki inoremap <silent><expr><buffer> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "<C-]><Esc>:VimwikiReturn 1 5<CR>"
+augroup end
 
 " Key Mappings
 nnoremap <leader>ev :e $MYVIMRC<CR>
@@ -25,6 +50,9 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=0
 set expandtab
+
+" set c indentation to 8 spaces
+autocmd FileType c setlocal shiftwidth=8 tabstop=8 softtabstop=8 expandtab
 
 syntax enable
 
@@ -72,7 +100,6 @@ set guioptions-=b
 
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'github/copilot.vim'
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -82,6 +109,7 @@ Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'neovim/nvim-lspconfig'
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
