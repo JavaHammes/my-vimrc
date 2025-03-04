@@ -14,5 +14,9 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 ```
 
 ```
+sudo apt install clangd
+```
+
+```
 :PlugInstall
 ```
